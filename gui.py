@@ -1,11 +1,8 @@
 #!/usr/bin/env python
-# import pandas as pd
-# import numpy as np
+
 from tkinter import *
 import tkinter.font
-# import tkinter as tk
 from tkcalendar import DateEntry
-from datetime import datetime
 import math
 
 # Create GUI
