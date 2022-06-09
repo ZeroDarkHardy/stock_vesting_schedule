@@ -73,23 +73,14 @@ cliff_button = Button(root, text = "Toggle", bd=0, command = switch)
 cliff_button.grid(row=3, column=1)
 
 # Create function to find time between dates
+from dateutil.relativedelta import relativedelta
+
 def months_between(date1, date2):
-    date1 = datetime.strptime(date1, "%m-%d-%Y")
-    date2 = datetime.strptime(date2, "%m-%d-%Y")
-    return abs((date2 - date1).months)
+    difference = relativedelta(date2, date1)
+    return (difference.months + 12 * difference.years)
 
 
-# create function to be used as button command
-# def values():
-#     global total_options
-#     total_options = (entry1.get())
-
-#     global vesting_start
-#     vesting_start = (l1.get())
-
-#     global vesting_end
-#     vesting_end = (l2.get())
-
+# Create Command for Execute button
 def myClick():
     global total_options
     total_options = int(entry1.get())
@@ -99,11 +90,32 @@ def myClick():
 
     global vesting_end
     vesting_end = (cal2.get_date())
-
+    
+    # Display number of months
     output1a = Label(root, text="# of Months: ")
     output1a.grid(row=5, column=0)
-    output1b = Label(root, text=str(months_between(vesting_start, vesting_end))).grid(row=5, column=1)
-    # output1b.config(text=(months_between(vesting_start, vesting_end)))
+
+    if is_on == False:
+        vesting_months = (months_between(vesting_start, vesting_end))
+        output1b = Label(root, text=str(vesting_months))
+        output1b.grid(row=5, column=1)
+    else:
+        vesting_months = (int(months_between(vesting_start, vesting_end) - 11))
+        output1b = Label(root, text=str(vesting_months))
+        output1b.grid(row=5, column=1)
+
+    first_month = int(total_options / 4)
+
+    # Display first month's vested options (25%)
+    output2a = Label(root, text="First Month (25% of shares):")
+    output2a.grid(row=6, column=0)
+    output2b = Label(root, text="{}".format(first_month))
+    output2b.grid(row=6, column=1)
+
+    # Display number of options vested each month after
+    output3a = Label(root, text="Number of options per month after 1st:")
+    output3a.grid(row=7, column=0)
+
 
 myButton = Button(root, text="Execute", command=myClick).grid(row=4,column=0)
 
